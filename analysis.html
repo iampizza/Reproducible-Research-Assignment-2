@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Most harmful or destructive storms in the United States from 1950 to 2011</title>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Most harmful or destructive storms in the United States from 1950 to 2011</h1>
+
+<h2>Synopsis</h2>
+
+<p>In this document we present analysis of the last 60 years storms that occured in the United States. We highlight storm types that have the highest human and economic impact or los.</p>
+
+<pre><code class="r">datafile &lt;- bzfile(&quot;~/repos/Reproducible-Research-Assignment-2/repdata-data-StormData.csv.bz2&quot;, &quot;r&quot;)
+</code></pre>
+
+<pre><code>## Warning: cannot open bzip2-ed file
+## &#39;/Users/jmarhee/repos/Reproducible-Research-Assignment-2/repdata-data-StormData.csv.bz2&#39;,
+## probable reason &#39;No such file or directory&#39;
+</code></pre>
+
+<pre><code>## Error: cannot open the connection
+</code></pre>
+
+<pre><code class="r">csv &lt;- read.csv(datafile)
+</code></pre>
+
+<pre><code>## Error: object &#39;datafile&#39; not found
+</code></pre>
+
+<pre><code class="r">close(datafile)
+</code></pre>
+
+<pre><code>## Error: object &#39;datafile&#39; not found
+</code></pre>
+
+<h2>Data Processing</h2>
+
+<p>Cleaning data:</p>
+
+<ul>
+<li>using lower case event name to group them</li>
+<li>compute ranking of events according to number of injured and killed people</li>
+</ul>
+
+<pre><code class="r">csv$EVTYPE &lt;- tolower(csv$EVTYPE)
+</code></pre>
+
+<pre><code>## Error: object &#39;csv&#39; not found
+</code></pre>
+
+<pre><code class="r">typeScores &lt;- aggregate(cbind(csv$INJURIES, csv$FATALITIES) ~ csv$EVTYPE, csv, sum) # 10s
+</code></pre>
+
+<pre><code>## Error: object &#39;csv&#39; not found
+</code></pre>
+
+<pre><code class="r">fullZero &lt;- typeScores[,2] == 0 &amp; typeScores[,3] == 0
+</code></pre>
+
+<pre><code>## Error: object &#39;typeScores&#39; not found
+</code></pre>
+
+<pre><code class="r">cleanTypeScores &lt;- typeScores[!fullZero,]
+</code></pre>
+
+<pre><code>## Error: object &#39;typeScores&#39; not found
+</code></pre>
+
+<pre><code class="r">names(cleanTypeScores) &lt;- cbind(&quot;type&quot;, &quot;injuries&quot;, &quot;fatalities&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;cleanTypeScores&#39; not found
+</code></pre>
+
+<pre><code class="r">rankInjuries &lt;- order(cleanTypeScores[,2], decreasing=T)
+</code></pre>
+
+<pre><code>## Error: object &#39;cleanTypeScores&#39; not found
+</code></pre>
+
+<pre><code class="r">rankFatalities &lt;- order(cleanTypeScores[,3], decreasing=T)
+</code></pre>
+
+<pre><code>## Error: object &#39;cleanTypeScores&#39; not found
+</code></pre>
+
+<h2>Results</h2>
+
+<h3>Across the United States, which types of events are most destructive/harmful?</h3>
+
+<pre><code class="r">toPlot &lt;- cleanTypeScores[rankFatalities,]
+</code></pre>
+
+<pre><code>## Error: object &#39;cleanTypeScores&#39; not found
+</code></pre>
+
+<pre><code class="r">toPlot &lt;- toPlot[1:20,]
+</code></pre>
+
+<pre><code>## Error: object &#39;toPlot&#39; not found
+</code></pre>
+
+<pre><code class="r">toPlot &lt;- melt(toPlot, &quot;type&quot;)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;melt&quot;
+</code></pre>
+
+<pre><code class="r">ggplot(toPlot, aes(x=type, y=value, fill=variable)) + 
+  geom_bar(position=&quot;dodge&quot;)+
+  #geom_histogram(position=&quot;dodge&quot;) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(title=&quot;10 most destructive storms by type in the US - 1950 to 2011&quot;)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;ggplot&quot;
+</code></pre>
+
+<h3>Across the United States, which types of events have the greatest economic consequences?</h3>
+
+<p>We focus on event types implying <strong>B</strong>illion dollars of property and crop destructions.</p>
+
+<p>The list of event type is given bellow:</p>
+
+<pre><code class="r">eventsProp &lt;- sort(unique(csv$EVTYPE[csv$PROPDMGEXP == &quot;B&quot;]))
+</code></pre>
+
+<pre><code>## Error: object &#39;csv&#39; not found
+</code></pre>
+
+<pre><code class="r">eventsCrop &lt;- sort(unique(csv$EVTYPE[csv$PROPDMGEXP == &quot;B&quot;]))
+</code></pre>
+
+<pre><code>## Error: object &#39;csv&#39; not found
+</code></pre>
+
+<pre><code class="r">events     &lt;- sort(unique(rbind(eventsProp, eventsCrop)))
+</code></pre>
+
+<pre><code>## Error: object &#39;eventsProp&#39; not found
+</code></pre>
+
+<pre><code class="r">print(events)
+</code></pre>
+
+<pre><code>## Error: object &#39;events&#39; not found
+</code></pre>
+
+<h2>Reproducing the analysis</h2>
+
+<p>R source: <a href="https://github.com/iampizza/Reproducible-Research-Assignment-2/">https://github.com/iampizza/Reproducible-Research-Assignment-2/</a>
+Data: <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2">https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2</a></p>
+
+</body>
+
+</html>
